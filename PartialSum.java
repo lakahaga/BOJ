@@ -1,56 +1,37 @@
 package samgsung03;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.util.*;
 
-public class PartialSum {
-
-	public static void main(String[] args)throws IOException {
-		// TODO Auto-generated method stub
-		BufferedReader br= new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw=new BufferedWriter(new OutputStreamWriter(System.out));
-		
-		String[] line;
-		int[][] frac =new int [2][2];
-		int i=0;
-        String str;
-		while(true) {
-			str=br.readLine();
-			if(str==null) {
-				break;
-			}
-            line=str.split(" ");
-			frac[i][0]=Integer.parseInt(line[0]);
-			frac[i][1]=Integer.parseInt(line[1]);
-            i++;
-		}
-		br.close();
-		//tong bun
-		long[] ans=new long[2];
-		ans[1]=lcm(frac[0][1],frac[1][1]);
-		ans[0]=frac[0][0]*(ans[1]/frac[0][1])+frac[1][0]*(ans[1]/frac[1][1]);
-		long G=gcd(ans[1],ans[0]);
-		if(G!=0) {
-			ans[1]/=G;
-			ans[0]/=G;
-		}
-		bw.write(String.valueOf(ans[0])+" "+String.valueOf(ans[1]));
-		
-		bw.close();
-		
-	}
-	public static long gcd(long a, long b){
-        if(b==0) return a;
-        else return gcd(b,a%b);
-    }
-	
-    public static long lcm(long a, long b){
-        return a*b/gcd(a,b);
+public class PartialSUm{
+    private static int[] num=new int[100001];
+    private static int[] dp=new int[100001];
+    public static void main(String[] args) throws Exception {
+        BufferedReader br=new BufferedReader (new InputStreamReader(System.in));
+        BufferedWriter bw=new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st=new StringTokenizer(br.readLine());
+        int n=Integer.parseInt(st.nextToken());
+        int s=Integer.parseInt(st.nextToken());
+        st=new StringTokenizer(br.readLine());
+        for(int i=1;i<=n;i++) num[i]=Integer.parseInt(st.nextToken());
+        int sum=0;int len=Integer.MAX_VALUE;
+        dp[1]=num[1];dp[0]=0;
+        for(int i=2;i<=n;i++) dp[i]=dp[i-1]+num[i];
+        if(dp[n]<s) len=0;
+        else{
+            int start=1;int end=2;
+            while(start<=n && end<=n && start<=end){
+                sum=dp[end]-dp[start-1];
+                if(sum<s) end++;
+                else{
+                    if(len>end-start+1){len=end-start+1;}
+                    if(start==end) end++;
+                    else start++;
+                }
+            }
+        }
+        bw.write(String.valueOf(len));
+        br.close();
+        bw.close();
     }
 }
-
-
-
