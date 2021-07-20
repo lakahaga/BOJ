@@ -45,6 +45,9 @@ class Graph{
 			}
 		}
 	}
+	public int[] parent(){
+		return parent;
+	}
 	public String getParent() {
 		StringBuilder sb=new StringBuilder();
 		for(int i=2;i<=v;i++) {
@@ -71,7 +74,10 @@ public class FindParent {
 			g.add(u, v);
 		}
 		g.bfs(1);
-		
+		int[] par=g.parent();
+		for(int i=2;i<=n;i++){
+			System.out.println(par[i]);
+		}
 		bw.write(g.getParent());
 		br.close();bw.close();
 	}
